@@ -25,6 +25,9 @@ Project is created with:
 To download this programs, download and run it locally: 
 ```
 $ git clone https://github.com/kerszl/common-wordlists
+$ cd common-wordlists
+$ chmod +x common-wordlists.py
+$ ./common-wordlists.py
 ```
 ### Windows
 ```
