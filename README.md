@@ -18,7 +18,7 @@ Windows, Linux
 ### Linux
 To download these programs, download and run it locally: 
 ```
-$ git clone https://github.com/kerszl/smalls
+$ git clone https://github.com/kerszl/common-wordlists
 ```
 
 ### Windows
@@ -26,5 +26,5 @@ $ git clone https://github.com/kerszl/smalls
 press "win+r"
 type "cmd"
 type for example "cd c:\programs\"
-type for example"c:\programs\git clone https://github.com/kerszl/smalls"
+type for example"c:\programs\git clone https://github.com/kerszl/common-wordlists"
 ```
