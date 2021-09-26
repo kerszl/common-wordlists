@@ -33,11 +33,15 @@ ANALYZE_ORIGIN_COMM = "Resulting file will not be in the same order as in the fi
 SET_WORD_ORDER_COMM = "Setting the word order:"
 QUIET_MODE_COMM = "Quiet mode"
 WRONG_COMM = "Something wrong"
+COMMON_COM = "common_"
+FILE_SAVE_NAME_COMM = "Output filename"
 
 result_wordlist = ""
-strip = False
-origin = True
-quiet_mode = False
+#---parameters flag
+strip_flag = False
+origin_flag = True
+quiet_flag = False
+file_save_name_flag = False
 
 dict1_set = set()
 dict2_set = set()
@@ -125,21 +129,20 @@ def searching_for_common_words(dict1_set, dict2_set):
             found += 1            
             result_wordlist_list.add(i)
             make_space = columns-len(i)-2
-            if not quiet_mode:
+            if not quiet_flag:
                 print("\r"+i+" "*make_space)
     return result_wordlist_list
 
 
 
-def save_wordlist(result_wordlist_list):
-    result_wordlist_name = "common_"+DICT1_NAME+"_"+DICT2_NAME
-    print("\n{:<45s}{:s}".format(SAVING_DICT_COMM, result_wordlist_name))
+def save_wordlist(result_wordlist_list, filename):    
+    print("\n{:<45s}{:s}".format(SAVING_DICT_COMM, filename))
     try:
-        with open(result_wordlist_name, 'w') as f:
+        with open(filename, 'w') as f:
             for element in result_wordlist_list:
                 f.write("%s\n" % element)
     except Exception as error:
-        print(PROBLEM_WITH_THE_FILE_COMM, result_wordlist_name)
+        print(PROBLEM_WITH_THE_FILE_COMM, filename)
         print (error)        
         exit()
     
@@ -177,10 +180,11 @@ If parameters are not specified, the program uses the default wordlists.
 
 parser.add_argument('-w', '--wordlist', type=str, help=TWO_DICT_COMM,
                     required=False, nargs=2, metavar=('wordlist1', 'wordlist2'))
-
+parser.add_argument('-f', '--file', type=str,help=FILE_SAVE_NAME_COMM)
 parser.add_argument('-s', '--strip', help=STRIP_WORD_COMM, action="store_true")
 parser.add_argument('-ng', '--no-origin', help=ANALYZE_ORIGIN_COMM, action="store_true")
 parser.add_argument('-q', '--quiet', help=QUIET_MODE_COMM, action="store_true")
+
 
 args = parser.parse_args()
 if args.wordlist:
@@ -191,13 +195,17 @@ else:
     print("\n"+NO_PAR_COMM+"\n")
 
 if args.strip:
-    strip = True
+    strip_flag = True
 
 if args.no_origin:
-    origin = False
+    origin_flag = False
 
 if args.quiet:
-    quiet_mode = True
+    quiet_flag = True
+
+if args.file:
+    file_save_name_flag = True
+
 
 def init():
     global columns, start
@@ -212,7 +220,7 @@ dict2_set = read_wordlist(dict2_set, DICT2_NAME)
 
 
 
-if strip:
+if strip_flag:
     print(STRIP_WORD_COMM)
     dict1_set = check_strip_par(dict1_set)
     dict2_set = check_strip_par(dict2_set)
@@ -223,14 +231,19 @@ result_wordlist_list=searching_for_common_words(dict1_set,dict2_set)
 
 
 
-if origin:
+if origin_flag:
 
     result_wordlist_list=read_wordlist_4_analyze(DICT1_NAME, dict1_set_len,result_wordlist_list)
 
 else:
     print(ANALYZE_ORIGIN_COMM)
 
-save_wordlist(result_wordlist_list)
+if file_save_name_flag:
+    filename=args.file
+    save_wordlist(result_wordlist_list,filename)
+else:
+    filename = COMMON_COM+DICT1_NAME+"_"+DICT2_NAME
+    save_wordlist(result_wordlist_list,filename)
 
 finish = datetime.datetime.now().replace(microsecond=0)
 summary()
