@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# v0.6a 25.09.2021
+# v0.6b 26.09.2021
 import datetime
 import sys
 from statistics import mean
